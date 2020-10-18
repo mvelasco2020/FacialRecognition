@@ -1,3 +1,26 @@
+body{
+  font-family: 'Courier New', Courier, monospace;
+  background: rgb(18,255,255);
+background: linear-gradient(90deg, rgba(18,255,255,1) 0%, rgba(69,119,230,1) 45%, rgba(157,20,196,1) 100%);
+}
+
+.center{
+display: flex;
+justify-content: center;
+}
+
+.particles{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+button{
+  cursor: pointer;
+}
 .App {
   text-align: center;
 }
