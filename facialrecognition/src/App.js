@@ -8,9 +8,18 @@ import Navigation from './components/Navigation/Navigation'
 import Logo from './components/Logo/Logo'
 import UrlInputForm from './components/UrlInputForm/UrlInputForm.js'
 import Rank from './components/Rank/Rank.js'
+import imageOutput from './components/ImageOutput/ImageOutput'
 
 //Api
-import clarifaiApp from './Api/Clarifi'
+import Clarifai from 'clarifai'
+
+const app = new Clarifai.App({
+  apiKey: 'b8aad6f1ec154bab9037c10fa43e0f97'
+});
+
+
+
+
 
 class App extends Component {
   constructor() {
@@ -25,8 +34,20 @@ class App extends Component {
     console.log(event.target.value)
   }
 
-  onSubmit = () =>{
+  onSubmit = () => {
     console.log('clicked')
+
+    app.models.predict("a403429f2ddf4b49b307e318f00e528b",
+      "https://samples.clarifai.com/face-det.jpg")
+      .then(
+        function (response) {
+          console.log(response)
+        },
+        function (error) {
+          console.log(error)
+
+        }
+      )
   }
   render() {
     return (
@@ -37,14 +58,12 @@ class App extends Component {
         <Logo />
         <Rank />
 
-        <UrlInputForm 
-        onInputChange={this.onInputChange} 
-        onSubmit={this.onSubmit}/>
+        <UrlInputForm
+          onInputChange={this.onInputChange}
+          onSubmit={this.onSubmit} />
 
-        {/* 
-        <FaceRecognition/>
-         */
-        }
+        
+        <imageOutput/>
       </div>
     );
   }
