@@ -24,9 +24,31 @@ class App extends Component {
     super();
     this.state = {
       input: '',
-      imageUrl: ''
+      imageUrl: '',
+      box: {},
 
     }
+  }
+  calculateBoxLocation = (data) => {
+    const boxLocations = data.outputs[0]
+      .data
+      .regions[0]
+      .region_info
+      .bounding_box
+    const image = document.getElementById('outputImage')
+    const width = Number(image.width)
+    const height = Number(image.height)
+    console.log(image, width, height)
+    return {
+      leftCol: boxLocations.left_col * width,
+      topRow: boxLocations.top_row * height,
+      rightCol: width - (boxLocations.right_col * width),
+      bottomRow: height - (boxLocations.bottom_row * height)
+    }
+  }
+
+  displayBox = (box) => {
+    this.setState({ box: box })
   }
 
   onInputChange = (input) => {
@@ -40,24 +62,13 @@ class App extends Component {
       .then(
         response => {
           console.log(response)
-          this.calculateBoxLocation(response)
+          this.displayBox(this.calculateBoxLocation(response))
         })
       .catch(err =>
         console.log(err))
   }
 
-  calculateBoxLocation = (data) => {
-    const boxLocations = data.outputs[0]
-      .data
-      .regions[0]
-      .region_info
-      .bounding_box
-    const image = document.getElementById('outputImage')
-    const width = Number(image.width)
-    const height = Number(image.height)
-    console.log(image, width,height)
 
-  }
   render() {
     return (
       <div className="App">
@@ -66,13 +77,11 @@ class App extends Component {
         <Navigation />
         <Logo />
         <Rank />
-
         <UrlInputForm
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit} />
-
-
-        <ImageOutput imageUrl={this.state.imageUrl} />
+        <ImageOutput box={this.state.box} 
+                    imageUrl={this.state.imageUrl}/>
       </div>
     );
   }
