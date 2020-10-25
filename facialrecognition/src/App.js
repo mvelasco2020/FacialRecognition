@@ -8,7 +8,7 @@ import Navigation from './components/Navigation/Navigation'
 import Logo from './components/Logo/Logo'
 import UrlInputForm from './components/UrlInputForm/UrlInputForm.js'
 import Rank from './components/Rank/Rank.js'
-import imageOutput from './components/ImageOutput/ImageOutput'
+import ImageOutput from './components/ImageOutput/ImageOutput'
 
 //Api
 import Clarifai from 'clarifai'
@@ -19,33 +19,30 @@ const app = new Clarifai.App({
 
 
 
-
-
 class App extends Component {
   constructor() {
     super();
     this.state = {
       input: '',
+      imageUrl: ''
 
     }
   }
 
-  onInputChange = (event) => {
-    console.log(event.target.value)
+  onInputChange = (input) => {
+    this.setState({ input: input.target.value })
   }
 
   onSubmit = () => {
-    console.log('clicked')
-
-    app.models.predict("a403429f2ddf4b49b307e318f00e528b",
-      "https://samples.clarifai.com/face-det.jpg")
+    this.setState({ imageUrl: this.state.input });
+    app.models.predict(Clarifai.FACE_DETECT_MODEL,
+      this.state.input)
       .then(
         function (response) {
           console.log(response)
         },
         function (error) {
           console.log(error)
-
         }
       )
   }
@@ -62,8 +59,8 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit} />
 
-        
-        <imageOutput/>
+
+        <ImageOutput imageUrl={this.state.imageUrl} />
       </div>
     );
   }

@@ -1,9 +1,14 @@
 import React from 'react'
 
-const imageOutput = () =>{
-return(<div>
-a
-</div>);
+const ImageOutput = ({ imageUrl }) => {
+    return (<div className="center ma">
+        <img className="absolute mt2"
+            width='500px'
+            height='auto'
+            alt='User generated image'
+            src={imageUrl}
+        />
+    </div>);
 }
 
-export default imageOutput;
+export default ImageOutput;
