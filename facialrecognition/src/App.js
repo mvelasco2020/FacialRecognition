@@ -38,13 +38,25 @@ class App extends Component {
     app.models.predict(Clarifai.FACE_DETECT_MODEL,
       this.state.input)
       .then(
-        function (response) {
+        response => {
           console.log(response)
-        },
-        function (error) {
-          console.log(error)
-        }
-      )
+          this.calculateBoxLocation(response)
+        })
+      .catch(err =>
+        console.log(err))
+  }
+
+  calculateBoxLocation = (data) => {
+    const boxLocations = data.outputs[0]
+      .data
+      .regions[0]
+      .region_info
+      .bounding_box
+    const image = document.getElementById('outputImage')
+    const width = Number(image.width)
+    const height = Number(image.height)
+    console.log(image, width,height)
+
   }
   render() {
     return (
