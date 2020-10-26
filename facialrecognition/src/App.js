@@ -9,7 +9,7 @@ import Logo from './components/Logo/Logo'
 import UrlInputForm from './components/UrlInputForm/UrlInputForm.js'
 import Rank from './components/Rank/Rank.js'
 import ImageOutput from './components/ImageOutput/ImageOutput'
-
+import SignIn from './components/SignIn/SignIn.js'
 //Api
 import Clarifai from 'clarifai'
 
@@ -76,6 +76,7 @@ class App extends Component {
           params={ParticleOptions} />
         <Navigation />
         <Logo />
+        <SignIn/>
         <Rank />
         <UrlInputForm
           onInputChange={this.onInputChange}
