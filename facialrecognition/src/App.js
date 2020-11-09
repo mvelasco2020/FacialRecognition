@@ -18,8 +18,6 @@ const app = new Clarifai.App({
   apiKey: 'b8aad6f1ec154bab9037c10fa43e0f97'
 });
 
-
-
 class App extends Component {
   constructor() {
     super();
@@ -32,6 +30,12 @@ class App extends Component {
 
     }
   }
+
+  componentDidMount(){
+    fetch('http://localhost:3001/')
+    .then(res => {res.json()})
+  }
+
   calculateBoxLocation = (data) => {
     const boxLocations = data.outputs[0]
       .data
