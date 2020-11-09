@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const bcrypt = require('bcrypt-nodejs');
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -47,21 +49,26 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
+    const { email, password } = req.body;
+    bcrypt.compare(req, hash, function (err, res) {
+        // res == true
+    });
     console.log(req.body)
     res.json('sent');
 });
 
 app.post('/register', (req, res) => {
-    console.log(req.body);
     const { name, email, password } = req.body;
 
-    testDb.users.push({
-        id: "4",
-        name: name,
-        email: email,
-        password: password,
-        entries: 0,
-        joined: new Date()
+    bcrypt.hash(password, null, null, (err, hash) => {
+        testDb.users.push({
+            id: "4",
+            name: name,
+            email: email,
+            password: hash,
+            entries: 0,
+            joined: new Date()
+        });
     });
 
     res.status(200).json(`Registration success for ${req.body.email}`)
@@ -103,7 +110,7 @@ app.put('/image', (req, res) => {
     res.send('GET request to the homepage')
 })
 
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log('app is running');
 });
 
