@@ -1,54 +1,99 @@
 import React from 'react'
 
-const SignIn = ({ onRouteChange }) => {
-    return (
-        <article className="br3 ba dark-gray shadow-5 b--black-10 mv4 w-100 w-50-m w-25-l mw6 center">
-            <main className="pa4 black-80">
-                <form className="measure">
-                    <fieldset id="sign_up"
-                        className="ba b--transparent ph0 mh0">
-                        <legend className="f2 fw6 ph0 mh0">
-                            Sign In
+
+class SignIn extends React.Component {
+    //create state, pass props to use it
+    constructor(props) {
+        super(props);
+        this.state = {
+            signinEmail: '',
+            signinPassword: ''
+        }
+    }
+    //set state
+    onEmailChange = (event) => {
+        this.setState({
+            signinEmail: event.target.value
+        })
+    }
+    onPasswordChange = (event) => {
+        this.setState({
+            signinPassword: event.target.value
+        })
+    }
+
+    onSubmit = () => {
+        fetch('http://localhost:3001/signin',
+            {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: this.state.signinEmail,
+                    password: this.state.signinPassword
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data === 'success') {
+                    this.props.onRouteChange('home');
+                }
+            })
+    }
+
+    render() {
+        //deconstruct methods from props
+        const { onRouteChange } = this.props;
+        return (
+            <article className="br3 ba dark-gray shadow-5 b--black-10 mv4 w-100 w-50-m w-25-l mw6 center" >
+                <main className="pa4 black-80">
+                    <form className="measure">
+                        <fieldset id="sign_up"
+                            className="ba b--transparent ph0 mh0">
+                            <legend className="f2 fw6 ph0 mh0">
+                                Sign In
                     </legend>
-                        <div className="mt3">
-                            <label className="db fw6 lh-copy f6"
-                                htmlFor="email-address">
-                                Email
+                            <div className="mt3">
+                                <label className="db fw6 lh-copy f6"
+                                    htmlFor="email-address">
+                                    Email
                         </label>
-                            <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                                type="email"
-                                name="email-address"
-                                id="email-address" />
-                        </div>
-                        <div className="mv3">
-                            <label className="db fw6 lh-copy f6"
-                                htmlFor="password">
-                                Password
+                                <input
+                                    onChange={this.onEmailChange}
+                                    className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                                    type="email"
+                                    name="email-address"
+                                    id="email-address" />
+                            </div>
+                            <div className="mv3">
+                                <label className="db fw6 lh-copy f6"
+                                    htmlFor="password">
+                                    Password
                         </label>
-                            <input className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                                type="password"
-                                name="password"
-                                id="password" />
+                                <input
+                                    onChange={this.onPasswordChange}
+                                    className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                                    type="password"
+                                    name="password"
+                                    id="password" />
+                            </div>
+                        </fieldset>
+                        <div className="">
+                            <input
+                                onClick={() => this.onSubmit()}
+                                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+                                type="submit"
+                                value="Sign in" />
                         </div>
-                    </fieldset>
-                    <div className="">
-                        <input
-                            onClick={() => onRouteChange('home')}
-                            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-                            type="submit"
-                            value="Sign in" />
-                    </div>
-                    <div className="lh-copy mt3">
-                        <p onClick={() => onRouteChange('register')}
-                            className="f6 link dim black db pointer">
-                            Register
+                        <div className="lh-copy mt3">
+                            <p onClick={() => onRouteChange('register')}
+                                className="f6 link dim black db pointer">
+                                Register
                         </p>
-                    </div>
-                </form>
-            </main>
-        </article>
-
-    )
+                        </div>
+                    </form>
+                </main>
+            </article>
+        )
+    }
 }
-
 export default SignIn;

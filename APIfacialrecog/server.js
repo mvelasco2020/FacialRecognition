@@ -1,10 +1,16 @@
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
+
+//Middle Wares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
+//----//
 
+//Constants
 const testDb = {
     users: [
         {
@@ -41,8 +47,10 @@ const testDb = {
     ]
 
 };
+//---//
 
 
+//Main
 app.get('/', (req, res) => {
 
     res.send(testDb.users);

@@ -31,11 +31,6 @@ class App extends Component {
     }
   }
 
-  componentDidMount(){
-    fetch('http://localhost:3001/')
-    .then(res => {res.json()})
-  }
-
   calculateBoxLocation = (data) => {
     const boxLocations = data.outputs[0]
       .data
