@@ -27,6 +27,13 @@ class App extends Component {
       box: {},
       route: 'signin',
       isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: new Date()
+      }
 
     }
   }
@@ -80,9 +87,22 @@ class App extends Component {
         console.log(err))
   }
 
+//this is called from the register component to pass back
+//the user info from database after register
+  loadUserInfo = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+      }
+    })
+  }
 
   render() {
-    const {route, imageUrl, box ,isSignedIn} = this.state;
+    const { route, imageUrl, box, isSignedIn } = this.state;
     return (
       <div className="App">
         <Particles className="particles"
@@ -100,7 +120,8 @@ class App extends Component {
           </div>
           : (route === 'signin'
             ? <SignIn onRouteChange={this.onRouteChange} />
-            : <Register onRouteChange={this.onRouteChange} />
+            : <Register onRouteChange={this.onRouteChange}
+                        loadUserInfo={this.loadUserInfo} />
           )
         }
 

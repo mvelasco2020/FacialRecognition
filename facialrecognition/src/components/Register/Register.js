@@ -41,6 +41,7 @@ class Register extends React.Component {
             .then(user => {
                 if (user) {
                     this.props.onRouteChange('home');
+                    this.props.loadUserInfo(user);
                 }
             })
     }
@@ -49,7 +50,7 @@ class Register extends React.Component {
         return (
             <article className="br3 ba dark-gray shadow-5 b--black-10 mv4 w-100 w-50-m w-25-l mw6 center">
                 <main className="pa4 black-80">
-                    <form class="measure">
+                    <form className="measure">
                         <fieldset id="sign_up"
                             className="ba b--transparent ph0 mh0">
                             <legend className="f2 fw6 ph0 mh0">
@@ -60,7 +61,7 @@ class Register extends React.Component {
                                     htmlFor="name">
                                     Name
                             </label>
-                                <input onChange={this.onNamechange}
+                                <input onChange={this.onNameChange}
                                     className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                                     type="text"
                                     name="name"
@@ -92,8 +93,7 @@ class Register extends React.Component {
                         <div className="">
                             <input
                                 onClick={this.onSubmit}
-                                class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-                                type="submit"
+                                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                                 value="Register" />
                         </div>
                     </form>

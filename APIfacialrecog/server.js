@@ -11,7 +11,7 @@ app.use(cors());
 //----//
 
 //Constants
-const testDb = {
+const database = {
     users: [
         {
             id: "1",
@@ -53,7 +53,7 @@ const testDb = {
 //Main
 app.get('/', (req, res) => {
 
-    res.send(testDb.users);
+    res.send(database.users);
 });
 
 app.post('/signin', (req, res) => {
@@ -69,7 +69,7 @@ app.post('/register', (req, res) => {
     const { name, email, password } = req.body;
 
     bcrypt.hash(password, null, null, (err, hash) => {
-        testDb.users.push({
+        database.users.push({
             id: "4",
             name: name,
             email: email,
@@ -77,16 +77,20 @@ app.post('/register', (req, res) => {
             entries: 0,
             joined: new Date()
         });
+        if(err){
+            console.log(err)
+        }
     });
-
-    res.status(200).json(`Registration success for ${req.body.email}`)
+    console.log(req.body)
+    console.log(database.users[database.users.length -1])
+    res.json(database.users[database.users.length -1])
 });
 
 app.get('/profile/:id', (req, res) => {
     const { id } = req.params;
     let isUserFound = false;
 
-    testDb.users.forEach(user => {
+    database.users.forEach(user => {
         if (id === user.id) {
             isUserFound = true;
             return res.json(user);
@@ -103,7 +107,7 @@ app.put('/image', (req, res) => {
     const { id } = req.body;
     let isUserFound = false;
 
-    testDb.users.forEach(user => {
+    database.users.forEach(user => {
         if (id === user.id) {
             isUserFound = true;
             user.entries++;
