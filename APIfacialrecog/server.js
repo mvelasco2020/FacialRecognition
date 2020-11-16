@@ -62,7 +62,7 @@ app.post('/signin', (req, res) => {
         // res == true
     });
     console.log(req.body)
-    res.json('sent');
+    res.json(database.users[0]);
 });
 
 app.post('/register', (req, res) => {
@@ -111,7 +111,8 @@ app.put('/image', (req, res) => {
         if (id === user.id) {
             isUserFound = true;
             user.entries++;
-            return res.json(user.entries);
+           // return res.json(user.entries);
+            res.json(user.entries)
         }
     });
 
@@ -119,7 +120,6 @@ app.put('/image', (req, res) => {
         res.status(404).json('No such user found')
     }
 
-    res.send('GET request to the homepage')
 })
 
 app.listen(3001, () => {

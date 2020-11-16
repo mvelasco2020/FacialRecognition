@@ -14,6 +14,8 @@ import Register from './components/Register/Register.js'
 //Api
 import Clarifai from 'clarifai'
 
+//backend address
+const backend = 'http://localhost:3001';
 const app = new Clarifai.App({
   apiKey: 'b8aad6f1ec154bab9037c10fa43e0f97'
 });
@@ -47,7 +49,7 @@ class App extends Component {
     const image = document.getElementById('outputImage')
     const width = Number(image.width)
     const height = Number(image.height)
-    console.log(image, width, height)
+    //console.log(image, width, height)
     return {
       leftCol: boxLocations.left_col * width,
       topRow: boxLocations.top_row * height,
@@ -80,15 +82,29 @@ class App extends Component {
       this.state.input)
       .then(
         response => {
-          console.log(response)
+          if (response) {
+            fetch(`${backend}/image`, {
+              method: 'put',
+              headers: { 'Content-type': 'application/json' },
+              body: JSON.stringify({
+                id: this.state.user.id,
+              })
+            })
+              .then(data =>
+                data.json()
+              )
+              .then(count => {
+                this.setState(Object.assign(this.state.user, { entries: count }))
+              })
+          }
           this.displayBox(this.calculateBoxLocation(response))
         })
       .catch(err =>
         console.log(err))
   }
 
-//this is called from the register component to pass back
-//the user info from database after register
+  //this is called from the register component to pass back
+  //the user info from database after register
   loadUserInfo = (data) => {
     this.setState({
       user: {
@@ -111,7 +127,9 @@ class App extends Component {
         {this.state.route === 'home'
           ? <div>
             <Logo />
-            <Rank />
+            <Rank entries={this.state.user.entries}
+              name={this.state.user.name}
+            />
             <UrlInputForm
               onInputChange={this.onInputChange}
               onSubmit={this.onSubmit} />
@@ -119,9 +137,10 @@ class App extends Component {
               imageUrl={imageUrl} />
           </div>
           : (route === 'signin'
-            ? <SignIn onRouteChange={this.onRouteChange} />
+            ? <SignIn loadUserInfo={this.loadUserInfo}
+              onRouteChange={this.onRouteChange} />
             : <Register onRouteChange={this.onRouteChange}
-                        loadUserInfo={this.loadUserInfo} />
+              loadUserInfo={this.loadUserInfo} />
           )
         }
 
