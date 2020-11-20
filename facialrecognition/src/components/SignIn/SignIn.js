@@ -1,4 +1,5 @@
 import React from 'react'
+import {backend} from '../../Constants/Connections'
 
 
 class SignIn extends React.Component {
@@ -23,7 +24,7 @@ class SignIn extends React.Component {
     }
 
     onSubmit = () => {
-        fetch('http://localhost:3001/signin',
+        fetch(`${backend}/signin`,
             {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },

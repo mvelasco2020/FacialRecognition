@@ -1,5 +1,4 @@
-const ParticleOptions =  {
-    
+export const ParticleOptions =  {
         particles: {
             number: {
                 value: 15,
@@ -10,6 +9,3 @@ const ParticleOptions =  {
             }
         }
     }
-
-
-export default ParticleOptions
