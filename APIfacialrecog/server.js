@@ -39,7 +39,7 @@ app.post('/signin', (req, res) => {
         .then(user => {
             const isValidLogon = bcrypt.compareSync(req.body.password, user[0].hash)
             if (isValidLogon) {
-                return  db.select('*')
+                return db.select('*')
                     .from('users')
                     .where('email', '=', req.body.email)
                     .then(currentUser => {
@@ -47,7 +47,7 @@ app.post('/signin', (req, res) => {
                     }).catch(error => res.status(400).json('something went wrong'))
             }
             else
-            return res.status(400).json('Incorrect username or password')
+                return res.status(400).json('Incorrect username or password')
         })
         .catch(error => res.status(400).json('Incorrect username or password'))
 });
@@ -66,19 +66,22 @@ app.post('/register', (req, res) => {
                 .into('login')
                 .returning('email')
                 .then(logonEmail => {
-                    return db('users')
+                    return trx('users')
+                        .returning('*')
                         .insert({
                             name: name,
                             email: logonEmail[0],
                             joined: new Date()
                         })
+                        .then(data => res.json(data[0])
+                        )
                 })
-                .then(ok => {
+                .then(data => {
                     trx.commit
-                    res.status(400).json('done')
                 })
                 .catch(error => {
                     trx.rollback
+                    console.log(error)
                     res.json('error registering')
                 })
         })
