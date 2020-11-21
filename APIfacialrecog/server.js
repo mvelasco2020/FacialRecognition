@@ -33,32 +33,26 @@ app.get('/', (req, res) => {
 
 //Signin
 app.post('/signin', (req, res) => {
-    db('login').where('email', '=', req.body.email)
+    db.select('email', 'hash')
+        .from('login')
+        .where('email', '=', req.body.email)
         .then(user => {
-            console.log(user[0].length)
-            if (user.length === 0) {
-                return res.status(400).json('Incorrect username or password')
-
+            const isValidLogon = bcrypt.compareSync(req.body.password, user[0].hash)
+            if (isValidLogon) {
+                return  db.select('*')
+                    .from('users')
+                    .where('email', '=', req.body.email)
+                    .then(currentUser => {
+                        return res.status(200).json(currentUser[0])
+                    }).catch(error => res.status(400).json('something went wrong'))
             }
-            bcrypt.compare(req.body.password, user[0].hash, function (err, result) {
-                if (result) {
-                    db('users')
-                        .where('email', '=', req.body.email)
-                        .then(currentUser =>
-                            res.status(400)
-                                .json(currentUser[0]))
-                }
-                else {
-                    res.status(400).json('Incorrect username or password')
-                }
-            })
-            .catch(error => {
-                return res.status(400).json('Incorrect username or password')
-            })
+            else
+            return res.status(400).json('Incorrect username or password')
         })
-        .catch(res.json('something went wrong 0x00202020'))//)
-
+        .catch(error => res.status(400).json('Incorrect username or password'))
 });
+
+
 
 //Register
 app.post('/register', (req, res) => {
